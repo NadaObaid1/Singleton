@@ -1,41 +1,53 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package task2withgsg;
 
 public class Task2withGSG {
     public static void main(String[] args) {
-        System.out.println("Nada Obaid");
-        // Obtain the single instance of Logger
-        Logger logger1 = Logger.getInstance();
-        Logger logger2 = Logger.getInstance();
+        AppConfig config = AppConfig.getInstance();
 
-        // Log messages
-        logger1.log("log message1.");
-        logger2.log("log message2.");
-        
+        // Print default configuration settings
+        System.out.println("App Name: " + config.getAppName());
+        System.out.println("App Version: " + config.getAppVersion());
+        System.out.println("Default Language: " + config.getDefaultLanguage());
 
-        // Verify that logger1 and logger2 refer to the same instance
-        System.out.println(logger1 == logger2); 
+        // Modify configuration settings
+        config.setAppName("MyUpdatedApplication");
+        config.setAppVersion("2.0.0");
+        config.setDefaultLanguage("fr");
 
-        // Retrieve logged messages
-        System.out.println(logger1.getLogs()); 
+        // Get another instance of AppConfig and print updated settings
+        AppConfig anotherConfig = AppConfig.getInstance();
+        System.out.println("Updated App Name: " + anotherConfig.getAppName());
+        System.out.println("Updated App Version: " + anotherConfig.getAppVersion());
+        System.out.println("Updated Default Language: " + anotherConfig.getDefaultLanguage());
+
+        // Verify that both config instances are the same
+        if (config == anotherConfig) {
+            System.out.println("Both configuration instances are the same.");
+        }
     }
 }
 
 
-/*Why the Logger Needs to be a Singleton
-Single Resource Management: Logging is typically a centralized operation that needs to be managed across the entire application.
-Having a single instance of the Logger ensures that all log messages go to the same place, making them easier to track and manage.
+/*The singleton pattern is used to ensure that a class has only one instance and provides a global point of access to it.
+  Here’s why the AppConfig class is a good candidate for the singleton pattern:
 
-Global Access: The Singleton pattern allows all parts of the application to access the same Logger instance easily, 
-without needing to pass the Logger object around the different components of the application.
+Single Source of Truth:
+Centralized Configuration: The AppConfig class manages application-wide settings such as the application name, version, and default language.
+By using a singleton, you ensure that there is a single source of truth for these settings.
 
-Efficiency: It reduces the need to create new instances, saving memory and resources.
+Consistency: With a single instance managing the configuration, all parts of the application access the same configuration data.
+This prevents discrepancies that could occur if multiple instances with different settings were used.
 
-Consistency: Ensures that all log messages follow the same format and are stored in the same location, reducing errors and improving maintainability.
+Controlled Access:
+Global Access Point: The singleton pattern provides a global point of access to the configuration settings.
+Any part of the application can easily get the current configuration by calling AppConfig.getInstance().
 
-In this way, the Singleton Logger ensures that there is a single, centralized point of control for logging messages throughout the application,
-promoting efficiency, consistency, and ease of management.*/
+Controlled Modifications: By having a single instance, you can control and manage modifications to the configuration settings centrally, 
+ensuring that changes are propagated throughout the application.
+
+Efficient Resource Use: Only one instance of the AppConfig class is created, which can be more efficient in terms of memory and resource usage compared to creating multiple instances.
+Ease of Maintenance:
+
+Synchronized Access: In a multithreaded environment, using a singleton with proper synchronization 
+(e.g., the synchronized keyword in the getInstance method) ensures that the class is thread-safe and only one instance is created,
+even when accessed by multiple threads simultaneously.*/
